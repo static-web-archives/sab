@@ -408,36 +408,23 @@ document.getElementById('footerCopyright').textContent = '© ' + year + ' Sabine
 // Varied aspect ratios make the masonry interesting.
 // Swap src() to point to your own image files.
 const PHOTOS = [
-  { seed:11,  w:900,  h:900,  cat:'portrait',      title:'Golden Reverie'    },
-  { seed:22,  w:900,  h:550,  cat:'landscape',     title:'Pale Horizon'      },
-  { seed:33,  w:600,  h:750,  cat:'street',        title:'Neon Interlude'    },
-  { seed:44,  w:700,  h:1050, cat:'abstract',      title:'Fracture Study I'  },
-  { seed:55,  w:800,  h:580,  cat:'architecture',  title:'Glass & Steel'     },
-  { seed:66,  w:600,  h:820,  cat:'portrait',      title:'Tungsten Hours'    },
-  { seed:77,  w:900,  h:620,  cat:'landscape',     title:'Coastal Silence'   },
-  { seed:88,  w:650,  h:650,  cat:'abstract',      title:'Symmetry No.4'     },
-  { seed:99,  w:700,  h:980,  cat:'street',        title:'After Midnight'    },
-  { seed:101, w:800,  h:560,  cat:'architecture',  title:'Roman Arch'        },
-  { seed:112, w:600,  h:870,  cat:'portrait',      title:'Solitude'          },
-  { seed:123, w:900,  h:680,  cat:'landscape',     title:'Burning Sky'       },
-  { seed:134, w:640,  h:710,  cat:'abstract',      title:'Interference Wave' },
-  { seed:145, w:700,  h:1000, cat:'street',        title:'Market Hour'       },
-  { seed:156, w:800,  h:600,  cat:'architecture',  title:'The Grid'          },
-  { seed:167, w:600,  h:800,  cat:'portrait',      title:'Ember Light'       },
-  { seed:178, w:900,  h:540,  cat:'landscape',     title:'Frozen Plains'     },
-  { seed:189, w:660,  h:920,  cat:'abstract',      title:'Flux State'        },
-  { seed:200, w:700,  h:700,  cat:'street',        title:'Concrete Echo'     },
-  { seed:211, w:800,  h:660,  cat:'architecture',  title:'Arches at Dusk'    },
-  { seed:222, w:580,  h:760,  cat:'portrait',      title:'The Observer'      },
-  { seed:233, w:900,  h:590,  cat:'landscape',     title:'Wheat & Wind'      },
-  { seed:244, w:620,  h:860,  cat:'abstract',      title:'Ripple Effect'     },
-  { seed:255, w:700,  h:1050, cat:'street',        title:'Shadow Walk'       },
+  { seed:11,  w:900,  h:900,  cat:'trees',      title:'Golden Reverie'    },
+  { seed:22,  w:900,  h:550,  cat:'nature',     title:'Pale Horizon'      },
+  { seed:33,  w:600,  h:750,  cat:'abstract',        title:'Neon Interlude'    },
+  { seed:44,  w:700,  h:1050, cat:'water',      title:'Fracture Study I'  },
+  { seed:55,  w:800,  h:580,  cat:'floral',  title:'Glass & Steel'     },
+  { seed:66,  w:600,  h:820,  cat:'animal',      title:'Tungsten Hours'    },
+  { seed:77,  w:900,  h:620,  cat:'modern',     title:'Coastal Silence'   },
+  { seed:88,  w:650,  h:650,  cat:'mountains',      title:'Symmetry No.4'     },
+  { seed:99,  w:700,  h:980,  cat:'inspired',        title:'After Midnight'    },
+  { seed:101, w:800,  h:560,  cat:'channeled',  title:'Roman Arch'        },
+  { seed:112, w:600,  h:870,  cat:'spirit',      title:'Solitude'          },
 ];
 
 const src = p => `https://picsum.photos/seed/${p.seed}/${p.w}/${p.h}`;
 
 // ── PILL COUNTS ───────────────────────────────────────────────────────────────
-['all','portrait','landscape','street','abstract','architecture'].forEach(c => {
+['all','trees','landscape','street','abstract','architecture'].forEach(c => {
   const el = document.getElementById('cnt-' + c);
   if (el) el.textContent = (c === 'all' ? PHOTOS.length : PHOTOS.filter(p => p.cat === c).length);
 });
