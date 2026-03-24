@@ -359,11 +359,17 @@ footer span {
 <div class="filter-wrap">
   <span class="filter-eyebrow">Collection</span>
   <button class="pill active" data-filter="all">All <span class="pill-count" id="cnt-all"></span></button>
-  <button class="pill" data-filter="portrait">Portrait <span class="pill-count" id="cnt-portrait"></span></button>
-  <button class="pill" data-filter="landscape">Landscape <span class="pill-count" id="cnt-landscape"></span></button>
-  <button class="pill" data-filter="street">Street <span class="pill-count" id="cnt-street"></span></button>
+  <button class="pill" data-filter="trees">Trees <span class="pill-count" id="cnt-trees"></span></button>
+  <button class="pill" data-filter="nature">Nature <span class="pill-count" id="cnt-nature"></span></button>
+  <button class="pill" data-filter="water">Water <span class="pill-count" id="cnt-water"></span></button>
   <button class="pill" data-filter="abstract">Abstract <span class="pill-count" id="cnt-abstract"></span></button>
-  <button class="pill" data-filter="architecture">Architecture <span class="pill-count" id="cnt-architecture"></span></button>
+  <button class="pill" data-filter="floral">Floral <span class="pill-count" id="cnt-floral"></span></button>
+  <button class="pill" data-filter="animal">Animal <span class="pill-count" id="cnt-animal"></span></button>
+  <button class="pill" data-filter="modern">Modern <span class="pill-count" id="cnt-modern"></span></button>
+  <button class="pill" data-filter="mountains">Mountains <span class="pill-count" id="cnt-mountains"></span></button>
+  <button class="pill" data-filter="inspired">Inspired <span class="pill-count" id="cnt-inspired"></span></button>
+  <button class="pill" data-filter="channeled">Channeled <span class="pill-count" id="cnt-channeled"></span></button>
+  <button class="pill" data-filter="spirit">Spirit <span class="pill-count" id="cnt-spirit"></span></button>
 </div>
 
 <!-- GALLERY -->
@@ -408,20 +414,71 @@ document.getElementById('footerCopyright').textContent = '© ' + year + ' Sabine
 // Varied aspect ratios make the masonry interesting.
 // Swap src() to point to your own image files.
 const PHOTOS = [
-  { seed:11,  w:900,  h:900,  cat:'trees',      title:'Golden Reverie'    },
-  { seed:22,  w:900,  h:550,  cat:'nature',     title:'Pale Horizon'      },
-  { seed:33,  w:600,  h:750,  cat:'abstract',        title:'Neon Interlude'    },
-  { seed:44,  w:700,  h:1050, cat:'water',      title:'Fracture Study I'  },
-  { seed:55,  w:800,  h:580,  cat:'floral',  title:'Glass & Steel'     },
-  { seed:66,  w:600,  h:820,  cat:'animal',      title:'Tungsten Hours'    },
-  { seed:77,  w:900,  h:620,  cat:'modern',     title:'Coastal Silence'   },
-  { seed:88,  w:650,  h:650,  cat:'mountains',      title:'Symmetry No.4'     },
-  { seed:99,  w:700,  h:980,  cat:'inspired',        title:'After Midnight'    },
-  { seed:101, w:800,  h:560,  cat:'channeled',  title:'Roman Arch'        },
-  { seed:112, w:600,  h:870,  cat:'spirit',      title:'Solitude'          },
+  { seed: "1-1-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "2-1-1", w:900, h:900, cat:['animal'], title:'' },
+  { seed: "3-1-1", w:900, h:900, cat:['spirit'], title:'' },
+  { seed: "4-1-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "5-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "6-1-1", w:900, h:900, cat:['nature'], title:'' },
+  { seed: "7-1-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "8-1-1", w:900, h:900, cat:['abstract'], title:'' },
+  { seed: "9-1-1", w:900, h:900, cat:['abstract'], title:'' },
+  { seed: "10-1-1", w:900, h:900, cat:['abstract'], title:'' },
+  { seed: "11-1", w:900, h:900, cat:['abstract'], title:'' },
+  { seed: "12-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "13-1-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "14-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "15-1-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "16-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "17-1-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "18-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "19-1", w:900, h:900, cat:['abstract'], title:'' },
+  { seed: "20-1", w:900, h:900, cat:['animal'], title:'' },
+  { seed: "21-1", w:900, h:900, cat:['spirit'], title:'' },
+  { seed: "22-1-1", w:900, h:900, cat:['channeled'], title:'' },
+  { seed: "23-1", w:900, h:900, cat:['channeled'], title:'' },
+  { seed: "24-1", w:900, h:900, cat:['animal'], title:'' },
+  { seed: "25-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "26-1", w:900, h:900, cat:['abstract'], title:'' },
+  { seed: "27-1", w:900, h:900, cat:['abstract'], title:'' },
+  { seed: "28-1", w:900, h:900, cat:['inspired'], title:'' },
+  { seed: "29-1", w:900, h:900, cat:['animal'], title:'' },
+  { seed: "30-1", w:900, h:900, cat:['animal'], title:'' },
+  { seed: "31-1", w:900, h:900, cat:['animal'], title:'' },
+  { seed: "32-1", w:900, h:900, cat:['animal'], title:'' },
+  { seed: "33-1", w:900, h:900, cat:['water'], title:'' },
+  { seed: "34-1", w:900, h:900, cat:['water'], title:'' },
+  { seed: "35-1", w:900, h:900, cat:['modern'], title:'' },
+  { seed: "36-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "37-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "38-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "39-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "40-1-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "41-1", w:900, h:900, cat:['modern'], title:'' },
+  { seed: "42-1", w:900, h:900, cat:['nature'], title:'' },
+  { seed: "43-1", w:900, h:900, cat:['nature'], title:'' },
+  { seed: "44-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "45-1", w:900, h:900, cat:['channeled'], title:'' },
+  { seed: "46-1", w:900, h:900, cat:['channeled'], title:'' },
+  { seed: "47-1", w:900, h:900, cat:['water'], title:'' },
+  { seed: "50-1", w:900, h:900, cat:['water'], title:'' },
+  { seed: "51-1", w:900, h:900, cat:['nature'], title:'' },
+  { seed: "52-1", w:900, h:900, cat:['water'], title:'' },
+  { seed: "53-1", w:900, h:900, cat:['abstract'], title:'' },
+  { seed: "54-1", w:900, h:900, cat:['nature'], title:'' },
+  { seed: "55-1", w:900, h:900, cat:['floral'], title:'' },
+  { seed: "56-1", w:900, h:900, cat:['abstract'], title:'' },
+  { seed: "57-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "58-1", w:900, h:900, cat:['modern'], title:'' },
+  { seed: "59-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "60-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "61-1-1", w:900, h:900, cat:['mountains'], title:'' },
+  { seed: "62-1", w:900, h:900, cat:['abstract'], title:'' },
+  { seed: "63-1", w:900, h:900, cat:['trees'], title:'' },
+  { seed: "64-1", w:900, h:900, cat:['trees'], title:'' },
 ];
 
-const src = p => `https://picsum.photos/seed/${p.seed}/${p.w}/${p.h}`;
+const src = p => `https://raw.githubusercontent.com/static-web-archives/sab/main/images/${p.seed}.jpg`;
 
 // ── PILL COUNTS ───────────────────────────────────────────────────────────────
 ['all','trees','landscape','street','abstract','architecture'].forEach(c => {
@@ -436,7 +493,7 @@ let visible = [];
 let lbIdx   = 0;
 
 function render() {
-  visible = filter === 'all' ? [...PHOTOS] : PHOTOS.filter(p => p.cat === filter);
+  visible = filter === 'all' ? [...PHOTOS] : PHOTOS.filter(p => p.cat.includes(filter));
   masonry.innerHTML = '';
   visible.forEach((p, i) => {
     const d = document.createElement('div');
