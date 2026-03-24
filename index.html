@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sabine Hort — Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Kanit:wght@200;400;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ─── RESET & BASE ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0a0a0a;
+  --surface: #111111;
+  --border:  #222222;
+  --text:    #e8e0d4;
+  --muted:   #555;
+  --accent:  #e2c98a;
+  --gap:     10px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  min-height: 100vh;
+  cursor: crosshair;
+}
+
+/* grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── HEADER ─── */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  background: rgba(10,10,10,0.9);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2.5rem;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo { display: flex; align-items: center; text-decoration: none; }
+
+.logo-svg {
+  height: 38px;
+  width: auto;
+  display: block;
+}
+
+.hdr-right {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 200;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ─── FILTER BAR ─── */
+.filter-wrap {
+  padding: 1.6rem 2.5rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+
+.filter-eyebrow {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 200;
+  font-size: 0.58rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: 8px;
+}
+
+.pill {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 400;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  position: relative;
+  border-radius: 999px;
+}
+
+.pill:hover { color: var(--text); border-color: #444; }
+
+.pill.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+  font-weight: 600;
+}
+
+.pill-count { font-size: 0.54rem; opacity: 0.65; margin-left: 4px; }
+
+/* ─── MASONRY ─── */
+.gallery { padding: 1.4rem 2.5rem 5rem; }
+
+.masonry {
+  columns: 4;
+  column-gap: var(--gap);
+}
+
+@media (max-width: 1280px) { .masonry { columns: 3; } }
+@media (max-width: 860px)  { .masonry { columns: 2; } }
+@media (max-width: 500px)  { .masonry { columns: 1; } }
+
+/* CARD */
+.card {
+  break-inside: avoid;
+  margin-bottom: var(--gap);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--surface);
+  display: block;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
+              filter 0.4s ease;
+  filter: brightness(0.9) saturate(0.8);
+}
+
+.card:hover img {
+  transform: scale(1.05);
+  filter: brightness(1.05) saturate(1);
+}
+
+.card-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, transparent 45%, rgba(0,0,0,0.75) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.9rem;
+  pointer-events: none;
+}
+
+.card:hover .card-veil { opacity: 1; }
+
+.card-meta { display: flex; flex-direction: column; gap: 3px; }
+
+.card-cat {
+  font-family: 'Kanit', sans-serif;
+  font-size: 0.56rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(20px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.card { animation: fadeUp 0.48s ease both; }
+
+/* ─── LIGHTBOX ─── */
+.lb {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.32s ease;
+}
+.lb.open { opacity: 1; pointer-events: all; }
+
+.lb-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.94);
+  backdrop-filter: blur(16px);
+  cursor: pointer;
+}
+
+.lb-frame {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transform: scale(0.93) translateY(10px);
+  transition: transform 0.36s cubic-bezier(0.22, 0.61, 0.36, 1);
+  max-width: 94vw;
+}
+.lb.open .lb-frame { transform: scale(1) translateY(0); }
+
+.lb-img-wrap {
+  position: relative;
+  line-height: 0;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.9), 0 0 0 1px #1e1e1e;
+}
+.lb-img-wrap img {
+  display: block;
+  max-width: 88vw;
+  max-height: 82vh;
+  object-fit: contain;
+}
+
+.lb-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 30px;
+  height: 30px;
+  background: var(--accent);
+  border: none;
+  color: #000;
+  font-family: 'Kanit', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  z-index: 2;
+}
+.lb-close:hover { background: #fff; }
+
+.lb-bottom {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lb-info { display: flex; align-items: center; gap: 10px; }
+
+.lb-info-cat {
+  font-family: 'Kanit', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.lb-info-sep { color: #333; }
+.lb-info-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.lb-controls { display: flex; align-items: center; gap: 8px; }
+
+.lb-counter {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 200;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+.lb-btn {
+  width: 34px; height: 34px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.lb-btn:hover { background: var(--accent); border-color: var(--accent); color: #000; }
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 1.2rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+footer span {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 200;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#">
+    <svg class="logo-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300.807 59.678">
+      <g>
+        <path fill="#FFFFFF" d="M61.374,40.09c-0.57-1.048-1.424-1.993-2.563-2.837c-1.14-0.843-2.421-1.521-3.845-2.033c-1.424-0.513-2.911-0.895-4.46-1.146c-4.603-0.684-8.898-2.176-12.886-4.478c-0.342-0.182-0.707-0.569-1.094-1.162c-0.388-0.592-0.581-1.162-0.581-1.709c0-2.005,0.336-4.016,1.008-6.033c0.672-2.017,1.532-3.594,2.581-4.734c1.686-1.891,4.722-3.543,9.109-4.956c4.386-1.413,9.325-2.119,14.817-2.119c3.281,0,5.816,0.251,7.605,0.752c1.788,0.501,2.683,1.276,2.683,2.324c0,1.709-0.234,3.031-0.7,3.965c-0.468,0.935-0.97,1.555-1.504,1.863c-0.536,0.308-1.477,0.724-2.82,1.248c-1.436,0.501-2.683,1.025-3.743,1.572s-1.965,1.071-2.717,1.572c-0.752,0.501-1.219,0.752-1.401,0.752c-0.228,0-0.342-0.091-0.342-0.273c0-0.387,0.404-0.974,1.213-1.76c0.809-0.786,1.806-1.475,2.991-2.068c1.253-0.661,1.88-1.082,1.88-1.265c0-0.296-0.695-0.444-2.085-0.444c-4.216,0-8.112,0.376-11.689,1.128c-3.578,0.752-6.397,1.743-8.459,2.974c-2.062,1.23-3.093,2.484-3.093,3.76c0,0.798,0.427,1.362,1.282,1.692c0.854,0.331,2.74,0.883,5.657,1.658c2.917,0.775,5.525,1.664,7.827,2.666c3.304,1.413,5.753,2.883,7.349,4.409c1.595,1.527,2.393,3.236,2.393,5.127c0,1.299-0.313,2.604-0.94,3.914c-0.627,1.311-1.544,2.512-2.751,3.605c-1.208,1.094-2.598,1.993-4.17,2.7c-1.345,0.569-3.037,1.104-5.076,1.606c-2.04,0.501-4.25,0.894-6.631,1.18c-2.381,0.284-4.654,0.427-6.819,0.427c-3.988,0-7.195-0.376-9.622-1.128s-3.64-1.892-3.64-3.418c0-0.684,0.41-1.748,1.23-3.195s1.789-2.421,2.905-2.923c0.979-0.387,1.925-0.609,2.837-0.667c0.911-0.056,1.367,0.052,1.367,0.325c0,0.068-0.034,0.137-0.103,0.205s-0.148,0.126-0.239,0.171c-0.091,0.046-0.183,0.092-0.273,0.137c-0.456,0.183-0.826,0.324-1.111,0.428c-0.285,0.102-0.513,0.205-0.684,0.307c-0.171,0.104-0.256,0.246-0.256,0.428c0,0.479,2.358,0.718,7.075,0.718c4.102,0,7.462-0.147,10.083-0.444c2.62-0.296,4.933-0.831,6.938-1.606C57.91,42.528,59.733,41.457,61.374,40.09z"/>
+        <path fill="#FFFFFF" d="M74.243,36.701c2.721-2.471,5.361-4.306,7.922-5.505c2.561-1.199,4.539-1.799,5.936-1.799c0.375,0,0.725,0.157,1.047,0.47c0.322,0.313,0.577,0.676,0.766,1.088c0.188,0.412,0.281,0.716,0.281,0.913c0,0.322-0.125,0.56-0.375,0.712c-0.251,0.152-0.689,0.335-1.316,0.55c0.125,0.287,0.286,0.654,0.483,1.101c0.197,0.448,0.349,0.811,0.456,1.088s0.162,0.523,0.162,0.738c0,0.43-0.435,1.231-1.303,2.403c-0.869,1.173-1.478,2.037-1.826,2.592c-0.35,0.555-0.523,1.235-0.523,2.041c0,1.325,0.608,1.987,1.826,1.987c1.253,0,3.213-1.173,5.881-3.519V43.2c-4.529,5.031-7.771,7.547-9.722,7.547c-0.698,0-1.195-0.229-1.49-0.686c-0.296-0.456-0.443-1.132-0.443-2.027c0-1.414,0.511-3.465,1.53-6.15c-2.613,2.9-4.556,4.965-5.827,6.19c-1.271,1.227-2.318,1.84-3.142,1.84c-0.395,0-0.887-0.34-1.478-1.021s-1.114-1.562-1.571-2.646c-0.456-1.083-0.685-2.206-0.685-3.37c0-0.842,0.081-1.544,0.241-2.108c0.162-0.563,0.475-1.142,0.94-1.731C72.479,38.446,73.222,37.668,74.243,36.701z M87.106,33.747c-4.655,2.131-7.972,3.938-9.95,5.425s-2.968,3.017-2.968,4.593c0,0.572,0.099,1.043,0.296,1.409c0.197,0.367,0.466,0.551,0.806,0.551c0.197,0,0.546-0.125,1.047-0.376c1.881-1.11,3.6-2.556,5.156-4.337C83.052,39.23,84.922,36.809,87.106,33.747z"/>
+        <path fill="#FFFFFF" d="M111.196,41.562v1.746c-1.862,1.182-3.33,1.772-4.404,1.772c-0.591,0-1.218-0.099-1.88-0.296c-1.611,2.041-2.994,3.536-4.149,4.485c-1.154,0.949-2.313,1.423-3.478,1.423c-1.343,0-2.377-0.707-3.102-2.121c-0.726-1.414-1.088-3.169-1.088-5.264c0-2.847,0.859-5.948,2.578-9.306c1.719-3.356,3.791-6.499,6.217-9.426c2.426-2.928,4.776-5.349,7.05-7.265c2.273-1.916,3.813-2.874,4.619-2.874c0.77,0,1.155,0.528,1.155,1.584c0,4.691-6.016,12.873-18.047,24.546c-0.036,0.322-0.055,0.958-0.055,1.907c0,2.471,0.663,3.705,1.988,3.705c0.519,0,1.042-0.21,1.57-0.631c0.528-0.42,1.339-1.222,2.431-2.403c-0.43-0.967-0.645-1.683-0.645-2.148c0-0.984,0.403-2.05,1.208-3.196c0.807-1.146,1.724-2.135,2.753-2.967c1.029-0.833,1.777-1.249,2.243-1.249c0.733,0,1.101,0.528,1.101,1.585c0,0.805-0.211,1.771-0.631,2.9c-0.421,1.127-1.034,2.416-1.84,3.867c0.305,0.25,0.546,0.434,0.726,0.55c0.179,0.117,0.447,0.175,0.805,0.175C109.146,42.663,110.104,42.296,111.196,41.562z M97.554,37.534c0.931-0.807,1.866-1.76,2.807-2.86c0.939-1.102,2.313-2.789,4.122-5.062c1.736-2.184,3.102-4.006,4.096-5.465c0.993-1.459,1.741-2.672,2.242-3.639s0.752-1.629,0.752-1.987c0-0.269-0.071-0.403-0.215-0.403c-0.394,0-1.213,0.649-2.457,1.947c-1.245,1.298-2.663,3.075-4.257,5.331c-2.202,3.115-3.796,5.461-4.78,7.036C98.879,34.007,98.108,35.708,97.554,37.534z"/>
+        <path fill="#FFFFFF" d="M124.032,41.509v1.96c-1.736,2.238-3.356,3.926-4.86,5.062s-2.784,1.705-3.841,1.705c-1.468,0-2.561-0.77-3.276-2.31s-1.074-3.223-1.074-5.049c0-0.698,0.071-1.365,0.215-2.001c0.144-0.635,0.313-1.159,0.51-1.571c0.197-0.411,0.564-1.056,1.102-1.934c2.542-3.956,4.87-5.935,6.982-5.935c1.092,0,1.639,0.421,1.639,1.262c0,0.573-0.354,1.468-1.062,2.686c-0.707,1.217-1.338,2.085-1.894,2.604c-1.557,1.504-2.573,2.552-3.048,3.142c-0.475,0.592-0.712,1.263-0.712,2.015c0,0.645,0.242,1.182,0.726,1.611s1.11,0.645,1.88,0.645c0.842,0,1.768-0.309,2.779-0.927C121.109,43.858,122.421,42.869,124.032,41.509z M122.206,29.504c-0.447,0-0.873-0.17-1.275-0.51c-0.403-0.34-0.604-0.77-0.604-1.289c0-0.788,0.376-1.665,1.128-2.632s1.53-1.45,2.337-1.45c0.537,0,0.984,0.166,1.342,0.497c0.358,0.332,0.537,0.811,0.537,1.437c0,0.77-0.366,1.621-1.101,2.551C123.835,29.039,123.048,29.504,122.206,29.504z"/>
+        <path fill="#FFFFFF" d="M141.892,36.647c-3.151,3.509-4.727,5.953-4.727,7.332c0,0.77,0.313,1.154,0.94,1.154c0.519,0,1.194-0.272,2.027-0.819c0.832-0.546,2.135-1.517,3.907-2.913v1.853c-2.542,2.507-4.494,4.314-5.854,5.425s-2.471,1.665-3.33,1.665c-1.468,0-2.202-0.967-2.202-2.9c0-0.573,0.09-1.137,0.269-1.692c0.179-0.555,0.425-1.132,0.738-1.731s0.793-1.459,1.438-2.578s1.387-2.386,2.229-3.8c-1.021,0.519-2.301,1.548-3.84,3.088c-1.003,0.967-1.854,1.885-2.552,2.753s-1.446,1.835-2.242,2.9c-0.797,1.065-1.379,1.781-1.746,2.148s-0.738,0.55-1.114,0.55c-0.573,0-1.102-0.6-1.584-1.799c-0.484-1.199-0.726-2.596-0.726-4.189c0-0.984,0.111-1.755,0.336-2.31c0.224-0.555,0.667-1.343,1.329-2.363c1.235-1.897,2.301-3.29,3.195-4.176c0.896-0.887,1.755-1.33,2.578-1.33c0.573,0,1.034,0.099,1.384,0.295c0.349,0.197,0.523,0.501,0.523,0.913c0,0.179-0.054,0.367-0.161,0.564c-0.107,0.198-0.229,0.376-0.362,0.537c-0.135,0.162-0.417,0.475-0.847,0.94c-2.828,3.133-4.242,5.165-4.242,6.097c0,0.519,0.17,0.778,0.51,0.778c0.215,0,0.631-0.345,1.249-1.034c0.617-0.688,1.414-1.593,2.39-2.712s2.131-2.287,3.465-3.505c1.333-1.217,2.851-2.39,4.552-3.518c0.949-0.662,1.736-0.994,2.363-0.994c0.286,0,0.568,0.394,0.846,1.182c0.277,0.788,0.417,1.584,0.417,2.39C143.047,35.242,142.661,35.842,141.892,36.647z"/>
+        <path fill="#FFFFFF" d="M148.176,42.476v0.671c0,1.057,0.26,1.88,0.779,2.471c0.519,0.591,1.199,0.886,2.041,0.886c0.877,0,1.785-0.205,2.726-0.617c0.939-0.412,1.875-0.958,2.806-1.639c0.932-0.68,2.068-1.593,3.411-2.738v1.638c-2.023,2.435-3.921,4.302-5.693,5.6s-3.571,1.946-5.397,1.946c-1.594,0-2.856-0.617-3.787-1.853s-1.396-2.927-1.396-5.075c0-1.881,0.438-3.586,1.316-5.116c0.877-1.531,2.309-3.146,4.297-4.848c1.36-1.164,2.712-2.041,4.055-2.632s2.542-0.886,3.599-0.886c0.842,0,1.508,0.192,2.001,0.578c0.492,0.385,0.738,0.962,0.738,1.732c0,1.128-0.421,2.251-1.262,3.371c-0.842,1.119-2.127,2.229-3.854,3.33C152.826,40.394,150.7,41.454,148.176,42.476z M148.444,40.729c1.611-0.627,2.99-1.405,4.136-2.336c1.146-0.932,1.991-1.822,2.538-2.673c0.546-0.85,0.819-1.472,0.819-1.866c0-0.412-0.188-0.618-0.564-0.618c-0.322,0-0.846,0.206-1.571,0.618c-0.725,0.412-1.459,0.949-2.202,1.611s-1.41,1.441-2,2.336C149.008,38.697,148.623,39.673,148.444,40.729z"/>
+        <path fill="#FFFFFF" d="M186.989,19.958l-7.349,3.862c-1.139,0.57-1.902,0.854-2.29,0.854c-0.706,0-1.225-0.222-1.556-0.667c-0.329-0.444-0.495-1.133-0.495-2.068c0-1.071,0.229-2.307,0.684-3.708c0.456-1.401,0.98-2.432,1.572-3.093c0.615-0.684,2.056-1.624,4.323-2.82s4.996-2.398,8.187-3.606c3.189-1.208,6.517-2.21,9.98-3.008c3.463-0.797,6.631-1.196,9.502-1.196c2.005,0,3.486,0.319,4.443,0.957c0.957,0.638,1.436,2.324,1.436,5.059c0,1.481-0.508,3.127-1.521,4.939c-1.015,1.812-2.234,3.572-3.658,5.281s-4.062,4.74-7.912,9.092c2.051-0.319,3.555-0.524,4.512-0.615c0.957-0.091,2.745-0.285,5.366-0.581c3.03-4.375,5.479-7.867,7.349-10.476c1.868-2.609,3.452-4.773,4.751-6.494c1.299-1.72,2.073-2.706,2.324-2.957c0.455-0.524,0.837-0.723,1.146-0.598c0.307,0.125,0.461,0.598,0.461,1.418c0,0.935-0.098,1.698-0.291,2.29c-0.193,0.593-0.495,1.179-0.905,1.76s-0.627,0.895-0.649,0.94c-0.593,0.98-1.447,2.262-2.563,3.845c-1.117,1.584-2.211,3.15-3.281,4.7c-1.071,1.55-2.29,3.384-3.657,5.503c2.552,0.091,5.069,0.422,7.554,0.991l-6.152,8.34c-1.687-0.228-3.931-0.342-6.733-0.342c-0.684,1.367-1.213,2.438-1.59,3.213c-0.375,0.775-0.695,1.51-0.957,2.204c-0.262,0.696-0.393,1.34-0.393,1.932c0,0.365,0.107,0.85,0.324,1.453s0.325,0.951,0.325,1.042c0,0.456-0.337,0.94-1.009,1.452c-0.672,0.514-1.458,0.964-2.357,1.351c-0.901,0.387-1.602,0.581-2.103,0.581c-0.844,0-1.265-0.639-1.265-1.914c0-2.643,1.355-6.323,4.067-11.04c-3.601,0.297-7.736,0.832-12.407,1.606c-1.345,1.777-2.563,3.464-3.657,5.059c-1.094,1.596-1.988,2.939-2.683,4.033c-0.696,1.094-1.209,1.822-1.539,2.188c-0.33,0.364-0.689,0.547-1.076,0.547c-0.661,0-1.22-0.285-1.675-0.854c-0.205-0.229-0.337-0.455-0.394-0.684c-0.057-0.228-0.085-0.479-0.085-0.752s0-0.513,0-0.718c0-0.273,0.147-0.672,0.444-1.196c0.296-0.523,1.002-1.566,2.119-3.128c1.116-1.56,1.937-2.739,2.461-3.537c-0.593,0.068-1.356,0.103-2.29,0.103c-1.186,0-2.148-0.216-2.888-0.649c-0.741-0.433-1.111-0.968-1.111-1.606c0-0.729,0.193-1.509,0.581-2.341c0.387-0.832,0.889-1.527,1.504-2.085c0.615-0.558,1.23-0.837,1.846-0.837c0.41,0,0.899,0.125,1.47,0.376l8.818-2.188c4.922-5.332,8.59-9.547,11.006-12.646c2.415-3.099,3.623-5.093,3.623-5.981c0-0.501-0.137-0.917-0.41-1.248c-0.273-0.33-0.655-0.586-1.145-0.769c-0.491-0.182-1.055-0.273-1.692-0.273c-0.752,0-1.943,0.205-3.571,0.615c-1.63,0.41-3.572,1.014-5.828,1.812c-2.256,0.798-5.07,1.903-8.442,3.315c-2.507,1.025-3.76,1.675-3.76,1.948c0,0.319,0.171,0.524,0.513,0.615c0.342,0.091,0.78,0.16,1.316,0.205c0.534,0.046,0.803,0.125,0.803,0.239c0,0.091-0.132,0.217-0.393,0.376C187.804,19.537,187.444,19.73,186.989,19.958z"/>
+        <path fill="#FFFFFF" d="M242.079,41.454v1.8c-1.182,1.074-2.13,1.79-2.846,2.148c-0.717,0.358-1.746,0.501-3.089,0.43c-2.327,2.757-4.378,4.136-6.149,4.136c-1.003,0-1.916-0.331-2.74-0.994c-0.823-0.662-1.481-1.566-1.974-2.712s-0.738-2.426-0.738-3.841c0-1.146,0.38-2.416,1.142-3.812c0.761-1.396,1.745-2.699,2.954-3.908c1.208-1.208,2.502-2.184,3.88-2.927c1.379-0.743,2.659-1.115,3.841-1.115c0.842,0,1.504,0.13,1.987,0.389c0.483,0.26,0.725,0.623,0.725,1.088c0,0.358-0.205,0.77-0.617,1.235c0.681,0.144,1.146,0.38,1.396,0.712c0.251,0.331,0.376,0.936,0.376,1.812c0,0.859-0.201,1.942-0.604,3.25c-0.402,1.307-0.953,2.533-1.651,3.679l0.483,0.483h0.402c0.305,0,0.604-0.076,0.9-0.229c0.295-0.151,0.56-0.312,0.792-0.483C240.781,42.426,241.292,42.046,242.079,41.454z M236.548,34.392c-1.486,0.896-2.758,1.705-3.814,2.431c-1.056,0.725-1.951,1.459-2.686,2.202c-0.733,0.743-1.226,1.49-1.477,2.242c-0.447,2.005-0.672,3.088-0.672,3.25c0,1.182,0.824,1.771,2.471,1.771c0.771,0,2.06-0.662,3.867-1.986c-0.304-0.842-0.456-1.647-0.456-2.418c0-1.127,0.232-2.277,0.698-3.45S235.634,35.913,236.548,34.392z"/>
+        <path fill="#FFFFFF" d="M241.757,43.576v-1.745c0.967-1.146,1.701-2.122,2.202-2.928c-0.573-0.197-0.989-0.438-1.249-0.725c-0.26-0.287-0.39-0.717-0.39-1.289c0-0.645,0.27-1.46,0.807-2.444s1.199-1.907,1.986-2.766c0.788-0.859,1.504-1.414,2.148-1.665c0.251-0.125,0.493-0.188,0.726-0.188c0.358,0,0.537,0.17,0.537,0.51c0,0.305-0.277,0.922-0.833,1.853c3.688-0.573,6.016-0.859,6.982-0.859c0.377,0,0.636,0.036,0.779,0.107c0.305,0.161,0.555,0.537,0.752,1.128s0.295,1.182,0.295,1.772c0,0.376-0.165,0.783-0.496,1.222c-0.332,0.439-0.9,1.079-1.705,1.92c-0.949,1.021-1.746,2.131-2.391,3.33c-0.645,1.2-0.967,2.104-0.967,2.713c0,0.842,0.52,1.262,1.558,1.262c1.092,0,2.99-1.109,5.693-3.33v1.8c-1.486,1.558-2.712,2.784-3.679,3.679c-0.967,0.896-1.862,1.607-2.686,2.136c-0.824,0.528-1.559,0.792-2.203,0.792c-0.752,0-1.378-0.345-1.879-1.034c-0.502-0.688-0.752-1.688-0.752-2.994c0-0.77,0.196-1.647,0.59-2.632c0.395-0.984,0.972-2.055,1.732-3.209c0.761-1.155,1.616-2.306,2.564-3.451c-0.501,0.107-1.064,0.22-1.691,0.336s-1.289,0.237-1.987,0.362s-1.235,0.224-1.611,0.296C245.48,39.754,243.869,41.768,241.757,43.576z"/>
+        <path fill="#FFFFFF" d="M267.512,27.57h1.155c0.949-1.701,1.809-2.905,2.578-3.612c0.77-0.707,1.647-1.061,2.632-1.061s1.477,0.224,1.477,0.671c0,0.215-0.385,0.797-1.154,1.746c-0.77,0.949-1.352,1.746-1.746,2.39c0.609,0.072,1.15,0.134,1.625,0.188s0.846,0.099,1.115,0.134c-1.021,1.898-2.301,3.84-3.841,5.828c-0.501-0.036-0.922-0.067-1.263-0.094c-0.34-0.027-0.685-0.054-1.033-0.081c-0.35-0.026-0.774-0.058-1.275-0.094c-0.967,1.558-1.777,2.95-2.431,4.176c-0.654,1.227-1.155,2.351-1.504,3.37c-0.35,1.021-0.524,1.988-0.524,2.9c0,1.236,0.493,1.854,1.478,1.854c0.681,0,1.571-0.362,2.672-1.088c1.102-0.725,2.574-1.84,4.418-3.344v1.8c-4.834,5.246-8.405,7.868-10.716,7.868c-0.805,0-1.454-0.312-1.946-0.939c-0.493-0.627-0.739-1.433-0.739-2.417c0-0.662,0.139-1.45,0.417-2.363c0.277-0.913,0.774-2.292,1.49-4.136c-0.251,0.215-0.488,0.426-0.712,0.631c-0.224,0.206-0.43,0.395-0.617,0.564c-0.188,0.17-0.39,0.349-0.604,0.537c-0.215,0.188-0.43,0.38-0.645,0.577v-1.853c1.88-1.576,4.153-4.342,6.821-8.299c-0.269-0.018-0.52-0.031-0.752-0.04c-0.232-0.009-0.51-0.014-0.832-0.014c-1.057,0-1.845,0.072-2.363,0.215c-0.215,0.054-0.417,0.112-0.604,0.175c-0.188,0.062-0.318,0.094-0.39,0.094s-0.107-0.054-0.107-0.161c0-0.591,0.367-1.477,1.102-2.659c0.59-1.002,1.149-1.746,1.678-2.229s1.173-0.81,1.934-0.98C265.063,27.655,266.134,27.57,267.512,27.57z"/>
+      </g>
+    </svg>
+  </a>
+  <span class="hdr-right" id="hdrCopyright"></span>
+</header>
+
+<!-- FILTERS -->
+<div class="filter-wrap">
+  <span class="filter-eyebrow">Collection</span>
+  <button class="pill active" data-filter="all">All <span class="pill-count" id="cnt-all"></span></button>
+  <button class="pill" data-filter="portrait">Portrait <span class="pill-count" id="cnt-portrait"></span></button>
+  <button class="pill" data-filter="landscape">Landscape <span class="pill-count" id="cnt-landscape"></span></button>
+  <button class="pill" data-filter="street">Street <span class="pill-count" id="cnt-street"></span></button>
+  <button class="pill" data-filter="abstract">Abstract <span class="pill-count" id="cnt-abstract"></span></button>
+  <button class="pill" data-filter="architecture">Architecture <span class="pill-count" id="cnt-architecture"></span></button>
+</div>
+
+<!-- GALLERY -->
+<div class="gallery">
+  <div class="masonry" id="masonry"></div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb">
+  <div class="lb-bg"    id="lbBg"></div>
+  <div class="lb-frame" id="lbFrame">
+    <div class="lb-img-wrap">
+      <img id="lbImg" src="" alt="" />
+      <button class="lb-close" id="lbClose">&#10005;</button>
+    </div>
+    <div class="lb-bottom">
+      <div class="lb-info">
+        <span class="lb-info-cat"   id="lbCat"></span>
+        <span class="lb-info-sep">—</span>
+        <span class="lb-info-title" id="lbTitle"></span>
+      </div>
+      <div class="lb-controls">
+        <span class="lb-counter" id="lbCounter"></span>
+        <button class="lb-btn" id="lbPrev">&#8592;</button>
+        <button class="lb-btn" id="lbNext">&#8594;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span id="footerCopyright"></span>
+</footer>
+
+<script>
+// ── COPYRIGHT YEAR ────────────────────────────────────────────────────────────
+const year = new Date().getFullYear();
+document.getElementById('hdrCopyright').textContent  = '© ' + year + ' All rights reserved';
+document.getElementById('footerCopyright').textContent = '© ' + year + ' Sabine Hort — All rights reserved';
+// ── PHOTO DATA ────────────────────────────────────────────────────────────────
+// Varied aspect ratios make the masonry interesting.
+// Swap src() to point to your own image files.
+const PHOTOS = [
+  { seed:11,  w:900,  h:900,  cat:'portrait',      title:'Golden Reverie'    },
+  { seed:22,  w:900,  h:550,  cat:'landscape',     title:'Pale Horizon'      },
+  { seed:33,  w:600,  h:750,  cat:'street',        title:'Neon Interlude'    },
+  { seed:44,  w:700,  h:1050, cat:'abstract',      title:'Fracture Study I'  },
+  { seed:55,  w:800,  h:580,  cat:'architecture',  title:'Glass & Steel'     },
+  { seed:66,  w:600,  h:820,  cat:'portrait',      title:'Tungsten Hours'    },
+  { seed:77,  w:900,  h:620,  cat:'landscape',     title:'Coastal Silence'   },
+  { seed:88,  w:650,  h:650,  cat:'abstract',      title:'Symmetry No.4'     },
+  { seed:99,  w:700,  h:980,  cat:'street',        title:'After Midnight'    },
+  { seed:101, w:800,  h:560,  cat:'architecture',  title:'Roman Arch'        },
+  { seed:112, w:600,  h:870,  cat:'portrait',      title:'Solitude'          },
+  { seed:123, w:900,  h:680,  cat:'landscape',     title:'Burning Sky'       },
+  { seed:134, w:640,  h:710,  cat:'abstract',      title:'Interference Wave' },
+  { seed:145, w:700,  h:1000, cat:'street',        title:'Market Hour'       },
+  { seed:156, w:800,  h:600,  cat:'architecture',  title:'The Grid'          },
+  { seed:167, w:600,  h:800,  cat:'portrait',      title:'Ember Light'       },
+  { seed:178, w:900,  h:540,  cat:'landscape',     title:'Frozen Plains'     },
+  { seed:189, w:660,  h:920,  cat:'abstract',      title:'Flux State'        },
+  { seed:200, w:700,  h:700,  cat:'street',        title:'Concrete Echo'     },
+  { seed:211, w:800,  h:660,  cat:'architecture',  title:'Arches at Dusk'    },
+  { seed:222, w:580,  h:760,  cat:'portrait',      title:'The Observer'      },
+  { seed:233, w:900,  h:590,  cat:'landscape',     title:'Wheat & Wind'      },
+  { seed:244, w:620,  h:860,  cat:'abstract',      title:'Ripple Effect'     },
+  { seed:255, w:700,  h:1050, cat:'street',        title:'Shadow Walk'       },
+];
+
+const src = p => `https://picsum.photos/seed/${p.seed}/${p.w}/${p.h}`;
+
+// ── PILL COUNTS ───────────────────────────────────────────────────────────────
+['all','portrait','landscape','street','abstract','architecture'].forEach(c => {
+  const el = document.getElementById('cnt-' + c);
+  if (el) el.textContent = (c === 'all' ? PHOTOS.length : PHOTOS.filter(p => p.cat === c).length);
+});
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+const masonry = document.getElementById('masonry');
+let filter  = 'all';
+let visible = [];
+let lbIdx   = 0;
+
+function render() {
+  visible = filter === 'all' ? [...PHOTOS] : PHOTOS.filter(p => p.cat === filter);
+  masonry.innerHTML = '';
+  visible.forEach((p, i) => {
+    const d = document.createElement('div');
+    d.className = 'card';
+    d.style.animationDelay = Math.min(i * 40, 560) + 'ms';
+    d.innerHTML =
+      `<img src="${src(p)}" alt="${p.title}" loading="lazy" width="${p.w}" height="${p.h}">` +
+      `<div class="card-veil"><div class="card-meta">` +
+        `<span class="card-cat">${p.cat}</span>` +
+        `<span class="card-title">${p.title}</span>` +
+      `</div></div>`;
+    d.addEventListener('click', () => openLB(i));
+    masonry.appendChild(d);
+  });
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────────────────
+document.querySelectorAll('.pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filter = btn.dataset.filter;
+    render();
+  });
+});
+
+// ── LIGHTBOX ──────────────────────────────────────────────────────────────────
+const lb        = document.getElementById('lb');
+const lbImg     = document.getElementById('lbImg');
+const lbCat     = document.getElementById('lbCat');
+const lbTitle   = document.getElementById('lbTitle');
+const lbCounter = document.getElementById('lbCounter');
+
+function updateLB() {
+  const p = visible[lbIdx];
+  lbImg.src = src(p);
+  lbImg.alt = p.title;
+  lbCat.textContent   = p.cat;
+  lbTitle.textContent = p.title;
+  lbCounter.textContent = (lbIdx + 1) + ' / ' + visible.length;
+}
+
+function openLB(i) {
+  lbIdx = i;
+  updateLB();
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLB() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('lbClose').addEventListener('click', closeLB);
+document.getElementById('lbBg').addEventListener('click', closeLB);
+
+document.getElementById('lbPrev').addEventListener('click', () => {
+  lbIdx = (lbIdx - 1 + visible.length) % visible.length;
+  updateLB();
+});
+
+document.getElementById('lbNext').addEventListener('click', () => {
+  lbIdx = (lbIdx + 1) % visible.length;
+  updateLB();
+});
+
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape')     closeLB();
+  if (e.key === 'ArrowLeft')  { lbIdx = (lbIdx - 1 + visible.length) % visible.length; updateLB(); }
+  if (e.key === 'ArrowRight') { lbIdx = (lbIdx + 1) % visible.length; updateLB(); }
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
